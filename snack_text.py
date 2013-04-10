@@ -1,3 +1,5 @@
+## Sean Adler ##
+
 import requests
 from bs4 import BeautifulSoup
 from datetime import date, datetime
@@ -6,9 +8,14 @@ import twilio.twiml
 from flask import Flask, request
 import threading
 import os
+from ConfigParser import ConfigParser
 
-ACCOUNT_SID = "****"
-AUTH_TOKEN = "****"
+
+PARSER = ConfigParser()
+PARSER.read('app.cfg')
+ACCOUNT_SID = PARSER.get('twilio', 'ACCOUNT_SID')
+AUTH_TOKEN = PARSER.get('twilio', 'AUTH_TOKEN')
+
 CLIENT = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 
 APP = Flask(__name__)
@@ -95,7 +102,7 @@ def deploy(heroku=True):
     else:
         ## We run the app locally:
         if __name__ == '__main__':
-            APP.run(port=5002)
+            APP.run(debug=True)
+
 
 deploy(heroku=True)
-
